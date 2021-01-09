@@ -55,8 +55,8 @@ def solve2Digits(numbers: list, target: int) -> str:
         return "{} + {}".format(number1, number2)
     if number1 - number2 == target:
         return "{} - {}".format(number1, number2)
-    if number1 - number2 == target:
-        return "{} - {}".format(number1, number2)
+    if number2 - number1 == target:
+        return "{} - {}".format(number2, number1)
     if number1 * number2 == target:
         return "{} * {}".format(number1, number2)
     if number1 / number2 == target:
@@ -134,4 +134,4 @@ def solve2(numbers: list, target: int) -> str:
     return "Impossible"
 
 
-print(solve2([5, 7, 8, 1, 3, 22, 42, 11, 36], 4))
+print(solve2([1, 2], 1))
