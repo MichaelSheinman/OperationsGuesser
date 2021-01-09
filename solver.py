@@ -81,6 +81,10 @@ def solve2(numbers: list, target: int) -> str:
     if len(numbers) == 2:
         return solve2Digits(numbers, target)
 
+    directSolution = solve(numbers, target)
+    if directSolution != "Impossible":
+        return directSolution
+
     for i in range(len(numbers)):
         for j in range(i+1, len(numbers)):
             n1 = numbers[i]
@@ -111,6 +115,7 @@ def solve2(numbers: list, target: int) -> str:
 
                 if expr != "Impossible" and expr != '':
                     return "({}) + {}".format(expression, expr)
+
 
                 # Subtraction
                 new_target = number - target
@@ -146,7 +151,3 @@ def solve2(numbers: list, target: int) -> str:
                         return "({}) / ({})".format(expr, expression)
     return "Impossible"
 
-
-if __name__ == '__main__':
-    for i in range(100):
-        print(solve2([50, 25, 2, i], i + 1))
