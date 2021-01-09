@@ -147,4 +147,6 @@ def solve2(numbers: list, target: int) -> str:
     return "Impossible"
 
 
-print(solve2([50, 25, 2, 0], 1))
+if __name__ == '__main__':
+    for i in range(100):
+        print(solve2([50, 25, 2, i], i + 1))
