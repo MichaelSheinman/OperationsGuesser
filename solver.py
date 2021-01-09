@@ -117,6 +117,12 @@ def solve2(numbers: list, target: int) -> str:
                 if expr != "Impossible" and expr != '':
                     return "({}) - ({})".format(expression, expr)
 
+                # Subtraction 2
+                new_target = number + target
+                expr = solve2(new_numbers, new_target)
+                if expr != "Impossible" and expr != '':
+                    return "({}) - ({})".format(expr, expression)
+
                 # Multiplication
                 if number != 0:
                     new_target = target / number
@@ -131,7 +137,12 @@ def solve2(numbers: list, target: int) -> str:
                     if expr != "Impossible" and expr != '':
                         return "({}) / ({})".format(expression, expr)
 
+                # Division 2
+                if number != 0:
+                    new_target = number * target
+                    expr = solve2(new_numbers, new_target)
+                    if expr != "Impossible" and expr != '':
+                        return "({}) / ({})".format(expr, expression)
     return "Impossible"
 
 
-print(solve2([1, 2], 1))
