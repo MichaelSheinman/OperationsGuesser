@@ -9,11 +9,11 @@ def solve2digits(numbers: list, target: int) -> str:
     both integers that equals target, or IMPOSSIBLE if no such
     expression exists.
     >>> solve2digits([0, 1], 0)
-    0 * 1
+    '0 * 1'
     >>> solve2digits([8, 2], 4)
-    8 / 2
+    '8 / 2'
     >>> solve2digits([8, 2], 99)
-    Impossible
+    'Impossible'
     """
     number1 = numbers[0]
     number2 = numbers[1]
@@ -44,9 +44,9 @@ def solve(numbers: list, target: int) -> str:
     all the integers in number equalling target, or IMPOSSIBLE, if no
     such expression exists.
     >>> solve([1, 7, 5, 2], 9)
-    ((1 + 7) / 2) + 5
+    '((1 + 7) / 2) + 5'
     >>> solve([1, 7, 5, 2], 999)
-    Impossible
+    'Impossible'
     """
     # Manually check possibilities for list of length 0, 1, and 2
     if len(numbers) == 0:
@@ -132,5 +132,7 @@ def solve(numbers: list, target: int) -> str:
 
 
 if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
     print(solve([1, 7, 5, 2], 9))
     print(solve([1, 7, 5, 2], 999))
