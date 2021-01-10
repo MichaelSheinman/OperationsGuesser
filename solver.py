@@ -34,6 +34,14 @@ def solve(numbers: list, target: int) -> str:
         if expr != "Impossible":
             return "{} - ({})".format(item, expr)
 
+        # Subtraction
+        # item - newTarget = target
+        new_target = target + item
+        expr = solve(numbers[:ii] +
+                     numbers[ii + 1:], new_target)
+        if expr != "Impossible":
+            return "({}) - {}".format(expr, item)
+
         # Division
         if target != 0:
             new_target = item / target
@@ -101,7 +109,7 @@ def solve2(numbers: list, target: int) -> str:
 
             if n2 != 0:
                 possible_numbers.append((n1 / n2,
-                                        "{} / {}".format(n1, n2)))
+                                         "{} / {}".format(n1, n2)))
             if n1 != 0:
                 possible_numbers.append((n2 / n1,
                                          "{} / {}".format(n2, n1)))
@@ -115,6 +123,7 @@ def solve2(numbers: list, target: int) -> str:
 
                 if expr != "Impossible" and expr != '':
                     return "({}) + {}".format(expression, expr)
+
 
                 # Subtraction
                 new_target = number - target
@@ -148,7 +157,14 @@ def solve2(numbers: list, target: int) -> str:
                     expr = solve2(new_numbers, new_target)
                     if expr != "Impossible" and expr != '':
                         return "({}) / ({})".format(expr, expression)
+
+                new_numbers.append(number)
+                solved = solve2(new_numbers, target)
+                if solved != "Impossible":
+                    solved = solved.replace(str(number),"(" + expression + ")", 1)
+                    return solved
+                new_numbers.remove(number)
     return "Impossible"
 
-
-print(solve2([1000, 25, 2, 2], 21))
+val = solve2([1000, 25, 2, 2], 21)
+print(val)
