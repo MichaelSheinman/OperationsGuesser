@@ -166,5 +166,7 @@ def solve2(numbers: list, target: int) -> str:
                 new_numbers.remove(number)
     return "Impossible"
 
-val = solve2([1000, 25, 2, 2], 21)
-print(val)
+
+if __name__ == '__main__':
+    val = solve2([55, 2, 3, 1, 18], 360)
+    print(val)
