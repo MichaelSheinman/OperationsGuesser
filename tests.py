@@ -62,6 +62,20 @@ def test_division():
     assert val != "Impossible"
 
 
+def test_nested():
+    val = solve2([55, 2, 3, 1, 18], 360)
+    print(val)
+    assert val != "Impossible"
+
+
+def test_failing():
+    product = 1
+    numbers = [3, 3, 2, 10, 5]
+    for number in numbers:
+        product *= number
+    assert solve2(numbers, product + 1) == "Impossible"
+
+
 if __name__ == '__main__':
     import pytest
     pytest.main(['tests.py'])
