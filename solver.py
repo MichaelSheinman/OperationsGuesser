@@ -1,58 +1,3 @@
-def solve(numbers: list, target: int) -> str:
-    """Solving Algorithm:
-    Take the first digit, then compute the
-    required value recursively.
-    """
-    if len(numbers) == 1:
-        if numbers[0] == target:
-            return str(numbers[0])
-        else:
-            return "Impossible"
-
-    for ii, item in enumerate(numbers):
-        # Addition
-        new_target = target - item
-
-        expr = solve(numbers[:ii] + numbers[ii + 1:], new_target)
-        if expr != "Impossible":
-            return "{} + ({})".format(item, expr)
-
-        # Multiplication
-        if item != 0:
-            new_target = target / item
-            if new_target == int(new_target):
-                expr = solve(numbers[:ii] +
-                             numbers[ii + 1:], new_target)
-                if expr != "Impossible":
-                    return "{} * ({})".format(item, expr)
-
-        # Subtraction
-        # item - newTarget = target
-        new_target = item - target
-        expr = solve(numbers[:ii] +
-                     numbers[ii + 1:], new_target)
-        if expr != "Impossible":
-            return "{} - ({})".format(item, expr)
-
-        # Subtraction
-        # item - newTarget = target
-        new_target = target + item
-        expr = solve(numbers[:ii] +
-                     numbers[ii + 1:], new_target)
-        if expr != "Impossible":
-            return "({}) - {}".format(expr, item)
-
-        # Division
-        if target != 0 and item != 0:
-            new_target = item / target
-            expr = solve(numbers[:ii] +
-                         numbers[ii + 1:], new_target)
-            if expr != "Impossible":
-                return "{} / ({})".format(item, expr)
-
-    return "Impossible"
-
-
 def solve2Digits(numbers: list, target: int) -> str:
     """Verify whether a list of 2 numbers can be made
     equal to target"""
@@ -73,7 +18,7 @@ def solve2Digits(numbers: list, target: int) -> str:
     return "Impossible"
 
 
-def solve2(numbers: list, target: int) -> str:
+def solve(numbers: list, target: int) -> str:
     """Solving Algorithm:
     Take two digits at a time, compute their result.
     Then see if the rest of the numbers can get to
@@ -89,9 +34,7 @@ def solve2(numbers: list, target: int) -> str:
     if len(numbers) == 2:
         return solve2Digits(numbers, target)
 
-    directSolution = solve(numbers, target)
-    if directSolution != "Impossible":
-        return directSolution
+
 
     for i in range(len(numbers)):
         for j in range(i+1, len(numbers)):
@@ -119,46 +62,46 @@ def solve2(numbers: list, target: int) -> str:
 
                 # Addition
                 new_target = target - number
-                expr = solve2(new_numbers, new_target)
+                expr = solve(new_numbers, new_target)
 
                 if expr != "Impossible" and expr != '':
                     return "({}) + {}".format(expression, expr)
 
                 # Subtraction
                 new_target = number - target
-                expr = solve2(new_numbers, new_target)
+                expr = solve(new_numbers, new_target)
                 if expr != "Impossible" and expr != '':
                     return "({}) - ({})".format(expression, expr)
 
                 # Subtraction 2
                 new_target = number + target
-                expr = solve2(new_numbers, new_target)
+                expr = solve(new_numbers, new_target)
                 if expr != "Impossible" and expr != '':
                     return "({}) - ({})".format(expr, expression)
 
                 # Multiplication
                 if number != 0:
                     new_target = target / number
-                    expr = solve2(new_numbers, new_target)
+                    expr = solve(new_numbers, new_target)
                     if expr != "Impossible" and expr != '':
                         return "({}) * ({})".format(expression, expr)
 
                 # Division
                 if target != 0 and number != 0:
                     new_target = number / target
-                    expr = solve2(new_numbers, new_target)
+                    expr = solve(new_numbers, new_target)
                     if expr != "Impossible" and expr != '':
                         return "({}) / ({})".format(expression, expr)
 
                     # Division 2
 
                     new_target = number * target
-                    expr = solve2(new_numbers, new_target)
+                    expr = solve(new_numbers, new_target)
                     if expr != "Impossible" and expr != '':
                         return "({}) / ({})".format(expr, expression)
 
                 new_numbers.append(number)
-                solved = solve2(new_numbers, target)
+                solved = solve(new_numbers, target)
                 if solved != "Impossible":
                     solved = solved.replace(str(number),"(" + expression + ")", 1)
                     return solved
@@ -168,4 +111,4 @@ def solve2(numbers: list, target: int) -> str:
 
 if __name__ == '__main__':
     numbers = [5, 5, 0]
-    print(solve2(numbers, 1000))
+    print(solve(numbers, 1000))
