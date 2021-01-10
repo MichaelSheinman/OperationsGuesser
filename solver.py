@@ -1,6 +1,17 @@
 def solve2Digits(numbers: list, target: int) -> str:
     """Verify whether a list of 2 numbers can be made
-    equal to target"""
+    equal to target.
+    Precondition: numbers is a list of two integers
+    Postcondition: Returns either a mathematical expression containing
+    both integers that equals target, or "Impossible" if no such
+    expression exists.
+    >>> solve2Digits([0, 1], 0)
+    0 * 1
+    >>> solve2Digits([8, 2], 4)
+    8 / 2
+    >>> solve2Digits([8, 2], 99)
+    Impossible
+    """
     number1 = numbers[0]
     number2 = numbers[1]
 
@@ -18,14 +29,24 @@ def solve2Digits(numbers: list, target: int) -> str:
     return "Impossible"
 
 
-def solve(numbers: list, target: int) -> str:
-    """Solving Algorithm:
+def solve(numbers: list, target: int) -> str: #TODO solving algorithm may have to be updated after optimization
+    """
+    Solving Algorithm:
     Take two digits at a time, compute their result.
     Then see if the rest of the numbers can get to
     those two digits.
+    Precondition: numbers is a list of integers
+    Postcondition: Returns either a mathematical expression containing 
+    all the integers in number equalling target, or "Impossible", if no
+    such expression exists.
+    >>> solve([1, 7, 5, 2], 9)
+    ((1 + 7) / 2) + 5
+    >>> solve([1, 7, 5, 2], 999)
+    Impossible
     """
+    # Manually check possibilities for list of length 0, 1, and 2
     if len(numbers) == 0:
-        return ''
+        return "Impossible"
     if len(numbers) == 1:
         if numbers[0] == target:
             return "{}".format(numbers[0])
@@ -33,8 +54,6 @@ def solve(numbers: list, target: int) -> str:
             return "Impossible"
     if len(numbers) == 2:
         return solve2Digits(numbers, target)
-
-
 
     for i in range(len(numbers)):
         for j in range(i+1, len(numbers)):
@@ -44,7 +63,6 @@ def solve(numbers: list, target: int) -> str:
             new_numbers.remove(n1)
             new_numbers.remove(n2)
 
-            # Addition
             possible_numbers = [(n1 + n2, "{} + {}".format(n1, n2)),
                                 (n1 - n2, "{} - {}".format(n1, n2)),
                                 (n2 - n1, "{} - {}".format(n2, n1)),
@@ -57,47 +75,46 @@ def solve(numbers: list, target: int) -> str:
                 possible_numbers.append((n2 / n1,
                                          "{} / {}".format(n2, n1)))
 
+            #Go through all six possible operations
             for number, expression in possible_numbers:
-                # Do the four operations
 
                 # Addition
                 new_target = target - number
                 expr = solve(new_numbers, new_target)
 
-                if expr != "Impossible" and expr != '':
+                if expr != "Impossible":
                     return "({}) + {}".format(expression, expr)
 
                 # Subtraction
                 new_target = number - target
                 expr = solve(new_numbers, new_target)
-                if expr != "Impossible" and expr != '':
+                if expr != "Impossible":
                     return "({}) - ({})".format(expression, expr)
 
-                # Subtraction 2
+                # Subtraction 2 (n2 - n1)
                 new_target = number + target
                 expr = solve(new_numbers, new_target)
-                if expr != "Impossible" and expr != '':
+                if expr != "Impossible":
                     return "({}) - ({})".format(expr, expression)
 
                 # Multiplication
                 if number != 0:
                     new_target = target / number
                     expr = solve(new_numbers, new_target)
-                    if expr != "Impossible" and expr != '':
+                    if expr != "Impossible":
                         return "({}) * ({})".format(expression, expr)
 
-                # Division
                 if target != 0 and number != 0:
+                    # Division
                     new_target = number / target
                     expr = solve(new_numbers, new_target)
-                    if expr != "Impossible" and expr != '':
+                    if expr != "Impossible":
                         return "({}) / ({})".format(expression, expr)
 
-                    # Division 2
-
+                    # Division 2 (n2 / n1)
                     new_target = number * target
                     expr = solve(new_numbers, new_target)
-                    if expr != "Impossible" and expr != '':
+                    if expr != "Impossible":
                         return "({}) / ({})".format(expr, expression)
 
                 new_numbers.append(number)
@@ -110,5 +127,5 @@ def solve(numbers: list, target: int) -> str:
 
 
 if __name__ == '__main__':
-    numbers = [5, 5, 0]
-    print(solve(numbers, 1000))
+    print(solve([1, 7, 5, 2], 9))
+    print(solve([1, 7, 5, 2], 999))
