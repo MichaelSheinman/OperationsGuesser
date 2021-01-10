@@ -43,7 +43,7 @@ def solve(numbers: list, target: int) -> str:
             return "({}) - {}".format(expr, item)
 
         # Division
-        if target != 0:
+        if target != 0 and item != 0:
             new_target = item / target
             expr = solve(numbers[:ii] +
                          numbers[ii + 1:], new_target)
@@ -124,7 +124,6 @@ def solve2(numbers: list, target: int) -> str:
                 if expr != "Impossible" and expr != '':
                     return "({}) + {}".format(expression, expr)
 
-
                 # Subtraction
                 new_target = number - target
                 expr = solve2(new_numbers, new_target)
@@ -145,14 +144,14 @@ def solve2(numbers: list, target: int) -> str:
                         return "({}) * ({})".format(expression, expr)
 
                 # Division
-                if target != 0:
+                if target != 0 and number != 0:
                     new_target = number / target
                     expr = solve2(new_numbers, new_target)
                     if expr != "Impossible" and expr != '':
                         return "({}) / ({})".format(expression, expr)
 
-                # Division 2
-                if number != 0:
+                    # Division 2
+
                     new_target = number * target
                     expr = solve2(new_numbers, new_target)
                     if expr != "Impossible" and expr != '':
@@ -168,5 +167,5 @@ def solve2(numbers: list, target: int) -> str:
 
 
 if __name__ == '__main__':
-    val = solve2([55, 2, 3, 1, 18], 360)
-    print(val)
+    numbers = [5, 5, 0]
+    print(solve2(numbers, 1000))
