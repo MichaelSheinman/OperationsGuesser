@@ -76,6 +76,11 @@ def test_failing():
     assert solve2(numbers, product + 1) == "Impossible"
 
 
+def test_failing2():
+    numbers = [5, 5, 0]
+    assert solve2(numbers, 1000) == "Impossible"
+
+
 if __name__ == '__main__':
     import pytest
     pytest.main(['tests.py'])
