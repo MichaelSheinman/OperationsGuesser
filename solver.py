@@ -116,7 +116,6 @@ def solve2(numbers: list, target: int) -> str:
                 if expr != "Impossible" and expr != '':
                     return "({}) + {}".format(expression, expr)
 
-
                 # Subtraction
                 new_target = number - target
                 expr = solve2(new_numbers, new_target)
@@ -151,3 +150,5 @@ def solve2(numbers: list, target: int) -> str:
                         return "({}) / ({})".format(expr, expression)
     return "Impossible"
 
+
+print(solve2([1000, 25, 2, 2], 21))
