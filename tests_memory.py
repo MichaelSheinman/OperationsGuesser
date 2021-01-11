@@ -1,4 +1,4 @@
-from memory_solver import solve
+from memory_solver import OperationGuess
 import random
 
 
@@ -6,15 +6,17 @@ def test_one_number():
     """
     Verify that one number can form target
     """
+    o = OperationGuess()
     for i in range(100):
-        assert solve([i], i) == str(i)
+        assert o.solve((i,), i) == str(i)
 
 
 def test_addition():
     """
     Verify that the program can add correctly
     """
-    additionSol = solve([1, 2, 3, 4], 10)
+    o = OperationGuess()
+    additionSol = o.solve((1, 2, 3, 4), 10)
     assert additionSol.count("+") == 3
     assert "1" in additionSol and "2" in additionSol
     assert "3" in additionSol and "4" in additionSol
@@ -23,14 +25,15 @@ def test_addition():
 def test_exceed():
     """Verify that the program cannot
     exceed the maximum generated value """
-    numbers = []
+    numbers = tuple()
     product = 1
     for _ in range(5):
         rn = random.randint(2, 10)
         product *= rn
-        numbers.append(rn)
+        numbers = numbers + (rn,)
 
-    assert solve(numbers, product + 1) == "Impossible"
+    o = OperationGuess()
+    assert o.solve(numbers, product + 1) == "Impossible"
 
 
 def test_increase():
@@ -38,8 +41,9 @@ def test_increase():
     Given 50, 25, 2, i
     (50/25)/2 + i == i + 1
     """
+    o = OperationGuess()
     for i in range(100):
-        assert solve([50, 25, 2, i], i + 1) != 'Impossible'
+        assert o.solve((50, 25, 2, i), i + 1) != 'Impossible'
 
 
 def test_sum_difference():
@@ -50,35 +54,38 @@ def test_sum_difference():
     Can always be evaluated to:
     (j + j + 1 + j + 2) - (4 - 6 + 7)
     """
+    o = OperationGuess()
     for j in range(1, 10):
-        numbers = [4, 6, 7]
-        numbers.extend([j, j+1, j + 2])
+        numbers = (4, 6, 7, j, j+1, j + 2)
         target = (j + j + 1 + j + 2) - (4 - 6 + 7)
-        assert solve(numbers, target) != "Impossible"
+        assert o.solve(numbers, target) != "Impossible"
 
 
 def test_division():
-    val = solve([1000, 25, 2, 2], 21)
+    o = OperationGuess()
+    val = o.solve((1000, 25, 2, 2), 21)
     assert val != "Impossible"
 
 
 def test_nested():
-    val = solve([55, 2, 3, 1, 18], 360)
-    print(val)
+    o = OperationGuess()
+    val = o.solve((55, 2, 3, 1, 18), 360)
     assert val != "Impossible"
 
 
 def test_failing():
+    o = OperationGuess()
     product = 1
-    numbers = [3, 3, 2, 10, 5]
+    numbers = (3, 3, 2, 10, 5)
     for number in numbers:
         product *= number
-    assert solve(numbers, product + 1) == "Impossible"
+    assert o.solve(numbers, product + 1) == "Impossible"
 
 
 def test_failing2():
-    numbers = [5, 5, 0]
-    assert solve(numbers, 1000) == "Impossible"
+    o = OperationGuess()
+    numbers = (5, 5, 0)
+    assert o.solve(numbers, 1000) == "Impossible"
 
 
 def test_edge():
@@ -86,8 +93,9 @@ def test_edge():
     Check that we can detect
     (999 - 44 - 79 * 501) * 203
     """
-    numbers = [999, 44, 79, 501, 203]
-    val = solve(numbers, -7840672)
+    o = OperationGuess()
+    numbers = (999, 44, 79, 501, 203)
+    val = o.solve(numbers, -7840672)
     assert val != "Impossible"
 
 
@@ -96,8 +104,9 @@ def test_edge_two():
     Check that we can detect
     ((99 + 11) / 11 + 1) * 888
     """
-    numbers = [99, 11, 11, 1, 888]
-    val = solve(numbers, 9768)
+    o = OperationGuess()
+    numbers = (99, 11, 11, 1, 888)
+    val = o.solve(numbers, 9768)
     assert val != "Impossible"
 
 
