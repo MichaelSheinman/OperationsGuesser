@@ -93,19 +93,26 @@ def solve(numbers: list, target: int) -> str:
                 new_target = number - target
                 expr = solve(new_numbers, new_target)
                 if expr != IMPOSSIBLE:
+                    if expr.isdecimal():
+                        return "({}) - {}".format(expression, expr)
                     return "({}) - ({})".format(expression, expr)
 
                 # Subtraction 2 (n2 - n1)
                 new_target = number + target
                 expr = solve(new_numbers, new_target)
                 if expr != IMPOSSIBLE:
+                    if expr.isdecimal():
+                        return "{} - ({})".format(expr, expression)
                     return "({}) - ({})".format(expr, expression)
+
 
                 # Multiplication
                 if number != 0:
                     new_target = target / number
                     expr = solve(new_numbers, new_target)
                     if expr != IMPOSSIBLE:
+                        if expr.isdecimal():
+                            return "({}) * {}".format(expression, expr)
                         return "({}) * ({})".format(expression, expr)
 
                 if target != 0 and number != 0:
@@ -113,18 +120,25 @@ def solve(numbers: list, target: int) -> str:
                     new_target = number / target
                     expr = solve(new_numbers, new_target)
                     if expr != IMPOSSIBLE:
+                        if expr.isdecimal():
+                            return "({}) / {}".format(expression, expr)
                         return "({}) / ({})".format(expression, expr)
 
                     # Division 2 (n2 / n1)
                     new_target = number * target
                     expr = solve(new_numbers, new_target)
                     if expr != IMPOSSIBLE:
+                        if expr.isdecimal():
+                            return "{} / ({})".format(expr, expression)
                         return "({}) / ({})".format(expr, expression)
 
                 new_numbers.append(number)
                 solved = solve(new_numbers, target)
                 if solved != IMPOSSIBLE:
-                    solved = solved.replace(str(number),
+                    if expression.isdecimal():
+                        solved = solved.replace(str(number), expression, 1)
+                    else:
+                        solved = solved.replace(str(number),
                                             "(" + expression + ")", 1)
                     return solved
                 new_numbers.remove(number)
