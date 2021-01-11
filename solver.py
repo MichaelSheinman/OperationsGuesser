@@ -29,6 +29,9 @@ def solve2digits(numbers: list, target: int) -> str:
     if number2 != 0:
         if number1 / number2 == target:
             return "{} / {}".format(number1, number2)
+    if number1 != 0:
+        if number2 / number1 == target:
+            return "{} / {}".format(number2, number1)
     return IMPOSSIBLE
 
 
