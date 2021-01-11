@@ -7,9 +7,23 @@ class OperationGuess:
 
     def __init__(self):
         self.sequence_to_target = {}
+        # sequence: {target: result}
 
     def reset_memory(self):
         self.sequence_to_target.clear()
+
+    def upper_bound(self, numbers: tuple) -> int:
+        """
+        Generate an upper bound for the operations
+        made with numbers
+        >>> o = OperationGuess()
+        >>> o.upper_bound((1, 3, 6)) >= 24
+        True
+        """
+        prod = 1
+        for number in numbers:
+            prod *= abs(number) + 1
+        return prod
 
     def solve2digits(self, numbers: tuple, target: int) -> str:
         """Verify whether a list of 2 numbers can be made
@@ -90,9 +104,6 @@ class OperationGuess:
         >>> o.solve((1, 7, 5, 2), 999)
         'Impossible'
         """
-        memory_status = self.check_memory(numbers, target)
-        if memory_status:
-            return memory_status
 
         # Manually check possibilities for list of length 0, 1, and 2
         if len(numbers) == 0:
@@ -105,9 +116,23 @@ class OperationGuess:
         if len(numbers) == 2:
             return self.solve2digits(numbers, target)
 
+        ub = self.upper_bound(numbers)
+        lb = -ub
+        if target > ub:
+            return 'Impossible'
+        if target < lb:
+            return 'Impossible'
+
+        memory_status = self.check_memory(numbers, target)
+        if memory_status:
+            return memory_status
+
         for i in range(len(numbers)):
 
             for j in range(i+1, len(numbers)):
+                memory_status = self.check_memory(numbers, target)
+                if memory_status:
+                    return memory_status
 
                 n1 = numbers[i]
                 n2 = numbers[j]
@@ -131,7 +156,7 @@ class OperationGuess:
                     # Addition
                     new_target = target - number
                     expr = self.solve(new_numbers, new_target)
-                    self.add_to_memory(numbers, target, expr)
+                    self.add_to_memory(new_numbers, new_target, expr)
 
                     if expr != IMPOSSIBLE:
                         return "({}) + {}".format(expression, expr)
@@ -139,7 +164,7 @@ class OperationGuess:
                     # Subtraction
                     new_target = number - target
                     expr = self.solve(new_numbers, new_target)
-                    self.add_to_memory(numbers, target, expr)
+                    self.add_to_memory(new_numbers, new_target, expr)
 
                     if expr != IMPOSSIBLE:
                         return "({}) - ({})".format(expression, expr)
@@ -147,7 +172,7 @@ class OperationGuess:
                     # Subtraction 2 (n2 - n1)
                     new_target = number + target
                     expr = self.solve(new_numbers, new_target)
-                    self.add_to_memory(numbers, target, expr)
+                    self.add_to_memory(new_numbers, new_target, expr)
 
                     if expr != IMPOSSIBLE:
                         return "({}) - ({})".format(expr, expression)
@@ -156,7 +181,7 @@ class OperationGuess:
                     if number != 0:
                         new_target = target / number
                         expr = self.solve(new_numbers, new_target)
-                        self.add_to_memory(numbers, target, expr)
+                        self.add_to_memory(new_numbers, new_target, expr)
                         if expr != IMPOSSIBLE:
                             return "({}) * ({})".format(expression, expr)
 
@@ -164,14 +189,14 @@ class OperationGuess:
                         # Division
                         new_target = number / target
                         expr = self.solve(new_numbers, new_target)
-                        self.add_to_memory(numbers, target, expr)
+                        self.add_to_memory(new_numbers, new_target, expr)
                         if expr != IMPOSSIBLE:
                             return "({}) / ({})".format(expression, expr)
 
                         # Division 2 (n2 / n1)
                         new_target = number * target
                         expr = self.solve(new_numbers, new_target)
-                        self.add_to_memory(numbers, target, expr)
+                        self.add_to_memory(new_numbers, new_target, expr)
                         if expr != IMPOSSIBLE:
                             return "({}) / ({})".format(expr, expression)
 
@@ -189,6 +214,8 @@ class OperationGuess:
 
 
 if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
     o = OperationGuess()
     print(o.solve((5, 2, 8), 9))
 
