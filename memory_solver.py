@@ -214,8 +214,8 @@ class OperationGuess:
 
 
 if __name__ == '__main__':
-    import doctest
-    doctest.testmod()
+    # import doctest
+    # doctest.testmod()
     o = OperationGuess()
     print(o.solve((5, 2, 8), 9))
 
