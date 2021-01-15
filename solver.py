@@ -3,6 +3,27 @@ from typing import Optional
 IMPOSSIBLE = "Impossible"
 
 
+def _upper_bound(numbers: tuple) -> int:
+    """
+    A private helper to generate an upper bound
+    for the operations made with numbers
+    >>> _upper_bound((1, 3, 6)) >= 24
+    True
+    """
+    prod = 1
+    for number in numbers:
+        prod *= abs(number) + 1
+    return prod
+
+
+def _sort_tuple(numbers: tuple) -> tuple:
+    """
+    A private helper to sort a tuple and return a new
+    sorted tuple.
+    """
+    return tuple(sorted(list(numbers)))
+
+
 class OperationGuess:
 
     def __init__(self):
@@ -12,26 +33,6 @@ class OperationGuess:
     def reset_memory(self):
         self.sequence_to_target.clear()
 
-    def upper_bound(self, numbers: tuple) -> int:
-        """
-        Generate an upper bound for the operations
-        made with numbers
-        >>> o = OperationGuess()
-        >>> o.upper_bound((1, 3, 6)) >= 24
-        True
-        """
-        prod = 1
-        for number in numbers:
-            prod *= abs(number) + 1
-        return prod
-
-    def _sort_tuple(self, numbers: tuple) -> tuple:
-        """
-        A private helper to sort a tuple and return a new
-        sorted tuple.
-        """
-        return tuple(sorted(list(numbers)))
-
     def solve2digits(self, numbers: tuple, target: int) -> str:
         """Verify whether a list of 2 numbers can be made
         equal to target.
@@ -39,12 +40,12 @@ class OperationGuess:
         Postcondition: Returns either a mathematical expression containing
         both integers that equals target, or IMPOSSIBLE if no such
         expression exists.
-        >>> o = OperationGuess()
-        >>> o.solve2digits((0, 1), 0)
+        >>> og = OperationGuess()
+        >>> og.solve2digits((0, 1), 0)
         '0 * 1'
-        >>> o.solve2digits((8, 2), 4)
+        >>> og.solve2digits((8, 2), 4)
         '8 / 2'
-        >>> o.solve2digits((8, 2), 99)
+        >>> og.solve2digits((8, 2), 99)
         'Impossible'
         """
         number1 = numbers[0]
@@ -79,7 +80,7 @@ class OperationGuess:
         Add <target> and <s> to memory.
         {tuple: {target: string representation of solution} }
         """
-        sequence = self._sort_tuple(sequence)
+        sequence = _sort_tuple(sequence)
 
         if sequence in self.sequence_to_target:
             self.sequence_to_target[sequence][target] = s
@@ -97,7 +98,6 @@ class OperationGuess:
         else:
             return None
 
-    # TODO solving algorithm may have to be updated after optimization
     def solve(self, numbers: tuple, target: int) -> str:
         """
         Solving Algorithm:
@@ -108,10 +108,10 @@ class OperationGuess:
         Postcondition: Returns either a mathematical expression containing
         all the integers in number equalling target, or IMPOSSIBLE, if no
         such expression exists.
-        >>> o = OperationGuess()
-        >>> o.solve((1, 7, 5, 2), 9)
-        '(5 - 2) - (1 - 7)'
-        >>> o.solve((1, 7, 5, 2), 999)
+        >>> og = OperationGuess()
+        >>> og.solve((1, 2), 3)
+        '1 + 2'
+        >>> og.solve((1, 7, 5, 2), 999)
         'Impossible'
         """
 
@@ -130,7 +130,7 @@ class OperationGuess:
         if memory_status:
             return memory_status
 
-        ub = self.upper_bound(numbers)
+        ub = _upper_bound(numbers)
         lb = -ub
         if target > ub:
             self.add_to_memory(numbers, target, IMPOSSIBLE)
@@ -234,8 +234,6 @@ class OperationGuess:
 
 
 if __name__ == '__main__':
-    # import doctest
-    # doctest.testmod()
-    o = OperationGuess()
-    print(o.solve((4, 8, 2, 11), 4))
+    import doctest
+    doctest.testmod()
 
