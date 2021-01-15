@@ -1,6 +1,5 @@
 import time
-from memory_solver import OperationGuess
-from solver import solve
+from solver import OperationGuess
 import random
 
 # AVERAGE CASE
@@ -14,11 +13,6 @@ for i in range(10, 100, 10):
     o.solve(t, 50)
     e = time.time()
     print("Memory Time: {}".format(e - s))
-
-    s = time.time()
-    solve(lst, 50)
-    e = time.time()
-    print("Regular Time: {}".format(e - s))
 
 
 # WORST CASE
