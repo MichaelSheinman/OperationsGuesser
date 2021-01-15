@@ -1,5 +1,6 @@
 import pygame
 
+
 pygame.init()
 WINDOW_HEIGHT = 500
 WINDOW_WIDTH = 500
@@ -112,10 +113,13 @@ while run:
                         print("Put an operator in EVERY red box")
                     else:
                         print(final_string)
-
             for i in range(len(signs)):
-                if signs[i][1] < mx < signs[i][1] + 50 and signs[i][2] < my < \
-                        signs[i][2] + 50:
+                if signs[i][3] == '-' and signs[i][1] - 5 <= mx <= signs[i][1] + 35 and \
+                        signs[i][2] - 8 <= my <= signs[i][2] + 15:
+                    clicking_obj[i] = True
+                    break
+                elif signs[i][3] != '-' and signs[i][1] <= mx <= signs[i][1] + 30 and signs[i][2] <= my <= \
+                        signs[i][2] + 30:
                     clicking_obj[i] = True
                     break
 
@@ -130,8 +134,8 @@ while run:
                                 blank_loc = (
                                     equation_display[y][0],
                                     equation_display[y][1])
-                                if blank_loc[0] <= signs[i][1] <= blank_loc[
-                                    0] + 30 and blank_loc[1] <= signs[i][2] <= \
+                                if blank_loc[0] <= mx <= blank_loc[
+                                    0] + 30 and blank_loc[1] <= my <= \
                                         blank_loc[1] + 30:
                                     signs[i][1] = blank_loc[0]
                                     signs[i][2] = blank_loc[1]
@@ -155,8 +159,11 @@ while run:
 
     for i in clicking_obj:
         if clicking_obj[i]:
-            signs[i][1] = mx
-            signs[i][2] = my
+            signs[i][1] = mx - 15
+            signs[i][2] = my - 15
+            if signs[i][3] == '-':
+                signs[i][1] = mx - 15
+                signs[i][2] = my - 3
 
     for item in equation_display:
         if len(item) == 2:
