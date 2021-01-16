@@ -201,7 +201,7 @@ class OperationGuess:
                         if expr != IMPOSSIBLE:
                             if expr.isdecimal() and (sign == '+' or sign == '-'):
                                 return "({}) * {}".format(expression, expr)
-                            elif expr.isdecimal() and (sign == '+' or sign == '-'):
+                            elif expr.isdecimal() and (sign == '*' or sign == '/'):
                                 return "{} * {}".format(expression, expr)
                             elif not expr.isdecimal() and (sign == '*' or sign == '/'):
                                 return "{} * ({})".format(expression, expr)
@@ -240,8 +240,8 @@ class OperationGuess:
                                 solved[to_replace + 1: to_replace + 3] == ' -' or to_replace == len(solved) - 1 or \
                                 solved[to_replace + 1] == ')') and \
                                 (solved[to_replace - 2: to_replace] == '+ ' or \
-                                 solved[to_replace - 2: to_replace] == '- ' or to_replace == 0 or \
-                                        solved[to_replace - 1] == '('):
+                                 (solved[to_replace - 2: to_replace] == '- ' and (sign != '-' or sign != '+')) or \
+                                 to_replace == 0 or solved[to_replace - 1] == '('):
                             solved = solved.replace(str(number), expression, 1)
                         elif (sign == '*' or sign == '/') and solved[to_replace - 2: to_replace] != '/ ':
                             solved = solved.replace(str(number), expression, 1)

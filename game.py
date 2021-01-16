@@ -46,7 +46,7 @@ pale = (255, 255, 153)
 
 win = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-icon = pygame.image.load("Basic_arithmetic_operators.png")
+icon = pygame.image.load("images/Basic_arithmetic_operators.png")
 
 pygame.display.set_caption("Operation Guesser")
 pygame.display.set_icon(icon)
@@ -117,8 +117,6 @@ height = 70
 run = True
 
 clicking_obj = {}
-
-print(eq)
 
 while run:
     win.fill((255, 255, 153))
@@ -302,7 +300,6 @@ while run:
                                 omited_string += eq[i]
                             else:
                                 omited_string += eq[i]
-                        print(eq)
 
 
 
