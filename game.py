@@ -3,6 +3,7 @@ import random
 import solver
 from eval_expression import *
 
+
 """
 CREDITS:
 Pygame basics and image loading:
@@ -117,13 +118,14 @@ run = True
 
 clicking_obj = {}
 
-
+print(eq)
 
 while run:
     win.fill((255, 255, 153))
+    mx, my = pygame.mouse.get_pos()
 
     if screen == GAME_SCREEN:
-        mx, my = pygame.mouse.get_pos()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -158,10 +160,8 @@ while run:
                         final_string = omited_string
                         for i in signs_placed:
                             final_string = final_string.replace("#", i[1], 1)
-                        if "#" in final_string:
-                            print("Put an operator in EVERY red box")
-                        else:
-                            if eval_expression(final_string):
+                        print(final_string)
+                        if "#" not in final_string and eval_expression(final_string):
                                 screen = VICTORY_SCREEN
 
                 for i in range(len(signs)):
@@ -237,31 +237,75 @@ while run:
         rect.topleft = (500 - rect.width, 450)
 
         win.blit(check, rect)
-        # Check button
-        #pygame.draw.rect(win, (0, 0, 0), (450, 450, 50, 50))
 
     elif screen == VICTORY_SCREEN:
-        vict_font = pygame.font.Font('freesansbold.ttf', 40)
+        vict_font = pygame.font.Font('freesansbold.ttf', 50)
 
-        vict1 = font2.render("Congratulations,", True, (0, 0, 0), pale)
-        vict2 = font2.render("you got it!", True, (0, 0, 0), pale)
-        vict3 = font2.render(":D", True, (0, 0, 0), pale)
+        vict1 = vict_font.render("Congratulations,", True, (0, 0, 0), pale)
+        vict2 = vict_font.render("you got it!", True, (0, 0, 0), pale)
+        vict3 = vict_font.render(":D", True, (0, 0, 0), pale)
 
         vict1_rect = vict1.get_rect()
         vict1_rect.topleft = (50, 160)
 
         vict2_rect = vict2.get_rect()
-        vict2_rect.topleft = (50, 220)
+        vict2_rect.topleft = (90, 220)
 
         vict3_rect = vict3.get_rect()
         vict3_rect.topleft = (240, 280)
 
+        retry = vict_font.render("Next Challenge?", True, (255, 255, 255), (0, 0, 0))
+        retry_rect = retry.get_rect()
+        retry_rect.topleft = (89, 450)
+
         win.blit(vict1, vict1_rect)
         win.blit(vict2, vict2_rect)
         win.blit(vict3, vict3_rect)
+        win.blit(retry, retry_rect)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if mx >= 89 and my >= 450:
+                        screen = GAME_SCREEN
+                        signs = []
+                        signs_placed = []
+                        clicking_obj = {}
+                        omited_string = ""
+                        eq = "Impossible"
+                        while eq == "Impossible":
+                            numbers = [random.randint(0, 9) for i in range(4)]
+                            numbers = tuple(numbers)
+                            result = random.randint(0, 50)
+                            solve = solver.OperationGuess()
+                            eq = solve.solve(numbers, result)
+
+                        eq += ' = {}'.format(result)
+
+                        num_spaces = len(eq)
+                        equation_display = []
+
+                        for i in range(num_spaces):
+                            if eq[i] == "+" or eq[i] == "-" or eq[
+                                i] == "/" or eq[i] == "*":
+                                equation_display.append(((20 + i * (WINDOW_WIDTH - 50) / num_spaces),
+                                                         WINDOW_HEIGHT * 0.30, 30, 30))
+                                omited_string += '#'
+                            elif eq[i].isnumeric() or eq[i] in "()=":
+                                num = font.render(eq[i], True, blue, pale)
+                                rect = num.get_rect()
+                                rect.topleft = ((20 + i * (WINDOW_WIDTH - 50) / num_spaces),
+                                                WINDOW_HEIGHT * 0.30)
+                                equation_display.append((num, rect))
+                                omited_string += eq[i]
+                            else:
+                                omited_string += eq[i]
+                        print(eq)
+
+
+
 
     pygame.display.update()
 

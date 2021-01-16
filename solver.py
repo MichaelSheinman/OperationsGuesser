@@ -189,7 +189,7 @@ class OperationGuess:
                     self.add_to_memory(new_numbers, new_target, expr)
 
                     if expr != IMPOSSIBLE:
-                        if sign == '*':
+                        if sign == '*' or sign == '/':
                             return "{} - {}".format(expr, expression)
                         return "{} - ({})".format(expr, expression)
 
@@ -199,11 +199,11 @@ class OperationGuess:
                         expr = self.solve(new_numbers, new_target)
                         self.add_to_memory(new_numbers, new_target, expr)
                         if expr != IMPOSSIBLE:
-                            if expr.isdecimal() and sign != '*':
+                            if expr.isdecimal() and (sign == '+' or sign == '-'):
                                 return "({}) * {}".format(expression, expr)
-                            elif expr.isdecimal() and sign == '*':
+                            elif expr.isdecimal() and (sign == '+' or sign == '-'):
                                 return "{} * {}".format(expression, expr)
-                            elif not expr.isdecimal() and sign == '*':
+                            elif not expr.isdecimal() and (sign == '*' or sign == '/'):
                                 return "{} * ({})".format(expression, expr)
                             return "({}) * ({})".format(expression, expr)
 
@@ -213,11 +213,11 @@ class OperationGuess:
                         expr = self.solve(new_numbers, new_target)
                         self.add_to_memory(new_numbers, new_target, expr)
                         if expr != IMPOSSIBLE:
-                            if expr.isdecimal() and sign != '*':
+                            if expr.isdecimal() and (sign == '+' or sign == '-'):
                                 return "({}) / {}".format(expression, expr)
-                            elif expr.isdecimal() and sign == '*':
+                            elif expr.isdecimal() and (sign == '*' or sign == '/'):
                                 return "{} / {}".format(expression, expr)
-                            elif not expr.isdecimal() and sign == '*':
+                            elif not expr.isdecimal() and (sign == '*' or sign == '/'):
                                 return "{} / ({})".format(expression, expr)
                             return "({}) / ({})".format(expression, expr)
 
@@ -237,11 +237,13 @@ class OperationGuess:
                     if solved != IMPOSSIBLE:
                         to_replace = solved.find(str(number))
                         if (solved[to_replace + 1: to_replace + 3] == ' +' or \
-                                solved[to_replace + 1: to_replace + 3] == ' -') and \
+                                solved[to_replace + 1: to_replace + 3] == ' -' or to_replace == len(solved) - 1 or \
+                                solved[to_replace + 1] == ')') and \
                                 (solved[to_replace - 2: to_replace] == '+ ' or \
-                                 solved[to_replace - 2: to_replace] == '- '):
+                                 solved[to_replace - 2: to_replace] == '- ' or to_replace == 0 or \
+                                        solved[to_replace - 1] == '('):
                             solved = solved.replace(str(number), expression, 1)
-                        elif sign == '*' and solved[to_replace - 2: to_replace] != '/ ':
+                        elif (sign == '*' or sign == '/') and solved[to_replace - 2: to_replace] != '/ ':
                             solved = solved.replace(str(number), expression, 1)
                         else:
                             solved = solved.replace(str(number), "(" + expression + ")", 1)
