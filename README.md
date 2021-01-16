@@ -1,9 +1,9 @@
 # Operation Guesser 
 
-The operation guesser receives a sequence of 
-numbers, a target value, and returns a string
-representing the arithmetic operations required
-to form the target.
+The operation guesser is a project inspired by the PyJac competition. 
+The project receives a sequence of numbers, a target value, and returns
+a string  representing the arithmetic operations required to
+form the target.
 
 ## Examples
 
@@ -13,6 +13,8 @@ to form the target.
 >>> solve((10, 20, 5), 6)
 (20 + 10) / 5
 ```
+You may run `consoleSolver.py` to experiment
+with the program's output in different scenrios. 
 
 
 ## User Interface
@@ -23,5 +25,4 @@ to form the target.
 
 The project require python 3,
 as well as pygame.
-You can `pip install pygame` 
-
+You can `pip install pygame`. 
