@@ -150,20 +150,20 @@ class OperationGuess:
                 n2 = numbers[j]
                 new_numbers = numbers[:i] + numbers[i+1:j] + numbers[j+1:]
 
-                possible_numbers = [(n1 + n2, "{} + {}".format(n1, n2)),
-                                    (n1 - n2, "{} - {}".format(n1, n2)),
-                                    (n2 - n1, "{} - {}".format(n2, n1)),
-                                    (n1 * n2, "{} * {}".format(n1, n2))]
+                possible_numbers = [(n1 + n2, "{} + {}".format(n1, n2), '+'),
+                                    (n1 - n2, "{} - {}".format(n1, n2), '-'),
+                                    (n2 - n1, "{} - {}".format(n2, n1), '-'),
+                                    (n1 * n2, "{} * {}".format(n1, n2), '*')]
 
                 if n2 != 0:
                     possible_numbers.append((n1 / n2,
-                                             "{} / {}".format(n1, n2)))
+                                             "{} / {}".format(n1, n2), '/'))
                 if n1 != 0:
                     possible_numbers.append((n2 / n1,
-                                             "{} / {}".format(n2, n1)))
+                                             "{} / {}".format(n2, n1), '/'))
 
                 # Go through all six possible operations
-                for number, expression in possible_numbers:
+                for number, expression, sign in possible_numbers:
 
                     # Addition
                     new_target = target - number
@@ -171,7 +171,7 @@ class OperationGuess:
                     self.add_to_memory(new_numbers, new_target, expr)
 
                     if expr != IMPOSSIBLE:
-                        return "({}) + {}".format(expression, expr)
+                        return "{} + {}".format(expression, expr)
 
                     # Subtraction
                     new_target = number - target
@@ -180,8 +180,8 @@ class OperationGuess:
 
                     if expr != IMPOSSIBLE:
                         if expr.isdecimal():
-                            return "({}) - {}".format(expression, expr)
-                        return "({}) - ({})".format(expression, expr)
+                            return "{} - {}".format(expression, expr)
+                        return "{} - ({})".format(expression, expr)
 
                     # Subtraction 2 (n2 - n1)
                     new_target = number + target
@@ -189,7 +189,9 @@ class OperationGuess:
                     self.add_to_memory(new_numbers, new_target, expr)
 
                     if expr != IMPOSSIBLE:
-                        return "({}) - ({})".format(expr, expression)
+                        if sign == '*':
+                            return "{} - {}".format(expr, expression)
+                        return "{} - ({})".format(expr, expression)
 
                     # Multiplication
                     if number != 0:
@@ -197,8 +199,12 @@ class OperationGuess:
                         expr = self.solve(new_numbers, new_target)
                         self.add_to_memory(new_numbers, new_target, expr)
                         if expr != IMPOSSIBLE:
-                            if expr.isdecimal():
+                            if expr.isdecimal() and sign != '*':
                                 return "({}) * {}".format(expression, expr)
+                            elif expr.isdecimal() and sign == '*':
+                                return "{} * {}".format(expression, expr)
+                            elif not expr.isdecimal() and sign == '*':
+                                return "{} * ({})".format(expression, expr)
                             return "({}) * ({})".format(expression, expr)
 
                     if target != 0 and number != 0:
@@ -207,8 +213,12 @@ class OperationGuess:
                         expr = self.solve(new_numbers, new_target)
                         self.add_to_memory(new_numbers, new_target, expr)
                         if expr != IMPOSSIBLE:
-                            if expr.isdecimal():
+                            if expr.isdecimal() and sign != '*':
                                 return "({}) / {}".format(expression, expr)
+                            elif expr.isdecimal() and sign == '*':
+                                return "{} / {}".format(expression, expr)
+                            elif not expr.isdecimal() and sign == '*':
+                                return "{} / ({})".format(expression, expr)
                             return "({}) / ({})".format(expression, expr)
 
                         # Division 2 (n2 / n1)
@@ -216,6 +226,8 @@ class OperationGuess:
                         expr = self.solve(new_numbers, new_target)
                         self.add_to_memory(new_numbers, new_target, expr)
                         if expr != IMPOSSIBLE:
+                            if expr.isdecimal():
+                                return "{} / ({})".format(expr, expression)
                             return "({}) / ({})".format(expr, expression)
 
                     # If everything else failed, add the current number
@@ -223,8 +235,16 @@ class OperationGuess:
                     new_numbers = new_numbers + (number,)
                     solved = self.solve(new_numbers, target)
                     if solved != IMPOSSIBLE:
-                        solved = solved.replace(str(number),
-                                                "(" + expression + ")", 1)
+                        to_replace = solved.find(str(number))
+                        if (solved[to_replace + 1: to_replace + 3] == ' +' or \
+                                solved[to_replace + 1: to_replace + 3] == ' -') and \
+                                (solved[to_replace - 2: to_replace] == '+ ' or \
+                                 solved[to_replace - 2: to_replace] == '- '):
+                            solved = solved.replace(str(number), expression, 1)
+                        elif sign == '*' and solved[to_replace - 2: to_replace] != '/ ':
+                            solved = solved.replace(str(number), expression, 1)
+                        else:
+                            solved = solved.replace(str(number), "(" + expression + ")", 1)
                         return solved
                     new_numbers = new_numbers[:-1]
 

@@ -24,7 +24,10 @@ pale = (255, 255, 153)
 
 win = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
+icon = pygame.image.load("Basic_arithmetic_operators.png")
+
 pygame.display.set_caption("Operation Guesser")
+pygame.display.set_icon(icon)
 
 plus = pygame.image.load("images/plus_sign.png")
 times = pygame.image.load("images/multiplication_sign.png")
