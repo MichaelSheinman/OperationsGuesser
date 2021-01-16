@@ -3,6 +3,27 @@ import random
 import solver
 from eval_expression import *
 
+"""
+CREDITS:
+Pygame basics and image loading:
+https://youtu.be/UdsNBIzsmlI
+
+Pygame mouse interactions:
+https://youtu.be/vhNiwvUv4Jw
+
+Pygame image scaling:
+https://www.pygame.org/docs/ref/transform.html
+
+Pygame font usage:
+https://www.pygame.org/docs/ref/font.html#pygame.font.Font
+
+Application icon and math operations:
+https://en.wikipedia.org/wiki/Operation_(mathematics)
+
+These sources were used as an intro to how to interact with pygame and the different aspects of it. Actual
+implementation (like drag and drop to snap to a red rectangle) was done by us 
+"""
+
 pygame.init()
 WINDOW_HEIGHT = 500
 WINDOW_WIDTH = 500
