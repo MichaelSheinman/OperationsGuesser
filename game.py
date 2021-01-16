@@ -118,7 +118,6 @@ run = True
 
 clicking_obj = {}
 
-print(eq)
 
 while run:
     win.fill((255, 255, 153))
@@ -160,7 +159,6 @@ while run:
                         final_string = omited_string
                         for i in signs_placed:
                             final_string = final_string.replace("#", i[1], 1)
-                        print(final_string)
                         if "#" not in final_string and eval_expression(final_string):
                                 screen = VICTORY_SCREEN
 
@@ -302,7 +300,6 @@ while run:
                                 omited_string += eq[i]
                             else:
                                 omited_string += eq[i]
-                        print(eq)
 
 
 
